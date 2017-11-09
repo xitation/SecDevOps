@@ -24,6 +24,8 @@
     template:
       src=gpgconf.j2
       dest=/tmp/gpgconf
+      owner={{ apache_web_owner }}
+      group={{ apache_web_group }}
     when:
       (key_dir_ready|success)
       and (not pub_key_dir.stat.exists or not enc_key_dir.stat.exists)
