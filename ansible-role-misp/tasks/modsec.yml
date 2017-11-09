@@ -44,6 +44,14 @@
       remote_src=true
     when: owasp_dir.stat.isdir is defined and owasp_dir.stat.isdir
 
+  - name: Fix CRS directory ACL's for systems with restrictive umasks
+    become: true
+    shell: find {{ modsec_dir }} -type d -exec chmod 755 {} \;
+
+  - name: Fix CRS file ACL's for systems with restrictive umasks
+    become: true
+    shell: find {{ modsec_dir }} -type f -exec chmod 644 {} \;
+
   - name: Configure OWASP rules for apache2
     become: true
     lineinfile:
