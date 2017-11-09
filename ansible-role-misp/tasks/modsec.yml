@@ -60,7 +60,6 @@
       insertbefore="^</IfModule>"
       backup=yes
     with_items:
-      - "	Include {{ modsec_owasp_dir }}/modsecurity.conf"
       - "       Include {{ modsec_owasp_dir }}/crs-setup.conf"
       - "	Include {{ modsec_owasp_dir }}/rules/*.conf"
     notify:
