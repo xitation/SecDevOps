@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  roles:
+    - { role: ansible-role-misp }
+  
+  vars_prompt:
+    - name: "mysql_root_pass"
+      prompt: "MySQL root password (current or default/empty)"
+      private: yes
+    - name: "mysql_root_new_pass"
+      prompt: "MySQL root password (new/current)"
+      private: yes
+    - name: "mysql_pass"
+      prompt: "Enter the mysql misp user password"
+      private: yes
+    - name: "apache_server_admin"
+      prompt: "Enter Apache Server Admin E-Mail Address"
+      private: no
+    - name: "ssl_cert_country"
+      prompt: "Enter Apache SSL cert Country"
+      private: no
+    - name: "ssl_cert_locality"
+      prompt: "Enter Apache SSL cert Locality"
+      private: no
+    - name: "ssl_cert_state"
+      prompt: "Enter Apache SSL cert State"
+      private: no
+    - name: "ssl_cert_organization"
+      prompt: "Enter Apache SSL cert Org"
+      private: no
+    - name: "ssl_cert_common_name"
+      prompt: "Enter Apache SSL cert Common Name (CN)"
+      private: no
+    - name: "gpg_name_real"
+      prompt: "Enter GPG Real Name"
+      private: no
+    - name: "gpg_name_email"
+      prompt: "Enter GPG E-Mail Address"
+      private: no
+
