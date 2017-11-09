@@ -39,36 +39,10 @@
   - name: Configure OWASP CRS
     become: true
     copy:
-      src={{ modsec_owasp_dir }}/modsecurity_crs_10_setup.conf.example
-      dest={{ modsec_owasp_dir }}/modsecurity_crs_10_setup.conf
+      src={{ modsec_owasp_dir }}/crs-setup.conf.example
+      dest={{ modsec_owasp_dir }}/crs-setup.conf
       remote_src=true
     when: owasp_dir.stat.isdir is defined and owasp_dir.stat.isdir
-
-  - name: Collect OWASP CRS base rules
-    find: paths={{ modsec_owasp_dir }}/base_rules
-    register: base_rules
-
-  - name: Activate OWASP base rules
-    become: true
-    file: 
-      src={{ item.path }}
-      dest={{ modsec_owasp_dir }}/activated_rules/{{ item.path | basename }}
-      state=link
-    with_items:
-      - "{{ base_rules.files }}"
-
-  - name: Collect OWASP CRS optional rules
-    find: paths={{ modsec_owasp_dir }}/optional_rules
-    register: optional_rules
-
-  - name: Activate OWASP optional rules
-    become: true
-    file: 
-      src={{ item.path }}
-      dest={{ modsec_owasp_dir }}/activated_rules/{{ item.path | basename }}
-      state=link
-    with_items:
-      - "{{ optional_rules.files }}"
 
   - name: Configure OWASP rules for apache2
     become: true
@@ -78,7 +52,8 @@
       insertbefore="^</IfModule>"
       backup=yes
     with_items:
-      - "	Include {{ modsec_owasp_dir }}/*.conf"
-      - "	Include {{ modsec_owasp_dir }}/activated_rules/*.conf"
+      - "	Include {{ modsec_owasp_dir }}/modsecurity.conf"
+      - "       Include {{ modsec_owasp_dir }}/crs-setup.conf"
+      - "	Include {{ modsec_owasp_dir }}/rules/*.conf"
     notify:
       - restart apache
